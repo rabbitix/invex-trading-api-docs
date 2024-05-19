@@ -1,0 +1,47 @@
+<div dir="rtl">
+<h1 class="code-line" data-line-start=2 data-line-end=3 ><a id="_API__INVEX_2"></a>مستندات API معامله INVEX</h1>
+<h3 class="code-line" data-line-start=4 data-line-end=5 ><a id="_4"></a>مقدمه</h3>
+<p class="has-line-data" data-line-start="6" data-line-end="7">به Invex خوش آمدید، یک پلتفرم پیشرو در معامله که راه‌حل‌های نوآورانه‌ای برای بازارسازها و دیگر کاربران ارائه می‌دهد. هدف ما قدرت‌بخشی به معامله‌گران با ابزارهای پیشرفته، زیرساخت‌های قوی، و خدمات بی‌نظیر مشتری است.</p>
+<p class="has-line-data" data-line-start="8" data-line-end="9">در Invex، مأموریت ما دموکراتیک‌سازی دسترسی به بازارهای مالی در عین حفظ رعایت سختگیرانه قوانین و نظارت‌های نظارتی است. ما تلاش می‌کنیم عملکرد، قابلیت اطمینان و مقیاس‌پذیری بی‌نظیری برای ارزهای دیجیتال ارائه دهیم.</p>
+<p class="has-line-data" data-line-start="10" data-line-end="11">پلتفرم ما به طیف وسیعی از مشتریان، از جمله سرمایه‌گذاران نهادی، شرکت‌های معامله‌گری اختصاصی و معامله‌گران فردی که به دنبال بهینه‌سازی بازده هستند، خدمت می‌کند.</p>
+<p class="has-line-data" data-line-start="12" data-line-end="13">در اینجا خلاصه‌ای از خدمات اصلی ما آورده شده است:</p>
+<ul>
+<li class="has-line-data" data-line-start="14" data-line-end="15"><strong>مسیر یابی سفارش سریع:</strong> از معماری با تاخیر کم ما برای اجرای سفارشات به سرعت و کارآمد استفاده کنید.</li>
+<li class="has-line-data" data-line-start="15" data-line-end="17"><strong>قیمت‌گذاری رقابتی:</strong> از ساختارهای قیمت‌گذاری رقابتی بهره‌مند شوید که برای استراتژی معامله شما مناسب است.</li>
+</ul>
+<p class="has-line-data" data-line-start="17" data-line-end="18">آماده‌اید از قابلیت‌های قدرتمند Invex بهره‌مند شوید؟ همین امروز با ثبت‌نام در یک حساب و دسترسی به منابع گسترده ما شروع کنید.</p>
+<h3 class="code-line" data-line-start=19 data-line-end=20 ><a id="____19"></a>احراز هویت و مجوز</h3>
+<p class="has-line-data" data-line-start="20" data-line-end="21">برای استفاده از Invex، ابتدا باید اطلاعات تماس اولیه را ارائه دهید، با شرایط و ضوابط ما موافقت کنید و مراحل تأیید هویت را تکمیل کنید تا مدارک API را دریافت کنید. پس از تأیید، یک جفت کلید API شامل یک کلید عمومی، یک کلید API برای استفاده در هدر (<strong>X-API-Key-Invex</strong>) و یک کلید مخفی دریافت خواهید کرد.</p>
+<p class="has-line-data" data-line-start="22" data-line-end="23">توجه: کلید API شما به عنوان یک شناسه امن عمل می‌کند که به شما اجازه می‌دهد درخواست‌ها را امضا کرده و هویت خود را تأیید کنید. نگه داشتن کلید API به صورت محرمانه بسیار مهم است؛ هرگز آن را با کسی خارج از افراد مجاز به اشتراک نگذارید. اگر مشکوک به فعالیت غیرمجاز یا نقض امنیتی شدید، بلافاصله به تیم پشتیبانی ما اطلاع دهید یا کلید API خود را از طریق داشبورد خود لغو کنید.</p>
+<p class="has-line-data" data-line-start="24" data-line-end="25">علاوه بر این، Invex چندین تدابیر امنیتی برای محافظت در برابر فعالیت‌های مخرب پیاده‌سازی می‌کند:</p>
+<p class="has-line-data" data-line-start="26" data-line-end="34">پروتکل‌های رمزنگاری: تمام ارتباطات بین سرورها و برنامه‌های مشتری از رمزنگاری استاندارد صنعت TLS v1.2+ استفاده می‌کند.<br>
+محدودیت‌های نرخ: برای جلوگیری از سوء استفاده، محدودیت‌های سختگیرانه‌ای بر روی برخی از نقاط انتهایی اعمال می‌کنیم.<br>
+پیشگیری از حملات بازپخش: سیستم‌های ما تلاش برای استفاده مجدد از پیام‌های ارسال شده قبلی را شناسایی و مسدود می‌کنند.<br>
+چگونه داده‌های ورودی را امضا کنیم؟<br>
+برای هر نقطه انتهایی با داده‌های ورودی، باید داده‌های ورودی خود را امضا کنید.<br>
+برای این کار، باید یک فیلد expire_at در پارامترهای query یا بدنه درخواست خود ارائه دهید.<br>
+به نمونه موجود در درخواست‌های زیر نگاهی بیندازید.<br>
+اما چگونه داده‌های خود را امضا کنید؟</p>
+<p class="has-line-data" data-line-start="35" data-line-end="36">در اینجا یک نمونه کد در پایتون آمده است:</p>
+<pre><code class="has-line-data" data-line-start="38" data-line-end="59" class="language-python"><span class="hljs-keyword">import</span> binascii
+<span class="hljs-keyword">from</span> cryptography.hazmat.primitives.serialization <span class="hljs-keyword">import</span> load_der_private_key
+<span class="hljs-keyword">from</span> cryptography.hazmat.primitives.asymmetric <span class="hljs-keyword">import</span> padding
+<span class="hljs-keyword">from</span> cryptography.hazmat.primitives <span class="hljs-keyword">import</span> hashes
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">sign_using_private_key</span><span class="hljs-params">()</span>:</span>
+    private_key = ... <span class="hljs-comment"># کلید مخفی API شما.</span>
+    message =...<span class="hljs-comment"># داده‌های ورودی کاربر به صورت JSON کد شده، شامل expire_at</span>
+    byte_private_key = binascii.unhexlify(private_key)
+    rsa_private_key = load_der_private_key(byte_private_key, password=<span class="hljs-keyword">None</span>)
+    signature = rsa_private_key.sign(
+        message.encode(),
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    <span class="hljs-keyword">return</span> signature.hex()
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    print(sign_using_private_key())
+</code></pre>
+</div>

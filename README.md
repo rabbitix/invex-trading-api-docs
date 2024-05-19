@@ -1,4 +1,3 @@
-<div dir="rtl">
 
 
 # مستندات API معامله INVEX
@@ -62,5 +61,3 @@ if __name__ == '__main__':
 
 
 
-
-</div>
