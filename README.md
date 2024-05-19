@@ -1,58 +1,57 @@
-# How to host Swagger API documentation with GitHub Pages
-[<img alt="The blog of Peter Evans: How to Host Swagger Documentation With Github Pages" title="View blog post" src="https://peterevans.dev/img/blog-published-badge.svg">](https://peterevans.dev/posts/how-to-host-swagger-docs-with-github-pages/)
+# مستندات API معامله INVEX
 
-This repository is a template for using the [Swagger UI](https://github.com/swagger-api/swagger-ui) to dynamically generate beautiful documentation for your API and host it for free with GitHub Pages.
+### مقدمه
 
-The template will periodically auto-update the Swagger UI dependency and create a pull request. See the [GitHub Actions workflow here](.github/workflows/update-swagger.yml).
+به Invex خوش آمدید، یک پلتفرم پیشرو در معامله که راه‌حل‌های نوآورانه‌ای برای بازارسازها و دیگر کاربران ارائه می‌دهد. هدف ما قدرت‌بخشی به معامله‌گران با ابزارهای پیشرفته، زیرساخت‌های قوی، و خدمات بی‌نظیر مشتری است.
 
-The example API specification used by this repository can be seen hosted at [https://peter-evans.github.io/swagger-github-pages](https://peter-evans.github.io/swagger-github-pages/).
+در Invex، مأموریت ما دموکراتیک‌سازی دسترسی به بازارهای مالی در عین حفظ رعایت سختگیرانه قوانین و نظارت‌های نظارتی است. ما تلاش می‌کنیم عملکرد، قابلیت اطمینان و مقیاس‌پذیری بی‌نظیری برای ارزهای دیجیتال ارائه دهیم.
 
-## Steps to use this template
+پلتفرم ما به طیف وسیعی از مشتریان، از جمله سرمایه‌گذاران نهادی، شرکت‌های معامله‌گری اختصاصی و معامله‌گران فردی که به دنبال بهینه‌سازی بازده هستند، خدمت می‌کند.
 
-1. Click the `Use this template` button above to create a new repository from this template.
+در اینجا خلاصه‌ای از خدمات اصلی ما آورده شده است:
 
-2. Go to the settings for your repository at `https://github.com/{github-username}/{repository-name}/settings` and enable GitHub Pages.
+- **مسیر یابی سفارش سریع:** از معماری با تاخیر کم ما برای اجرای سفارشات به سرعت و کارآمد استفاده کنید.
+- **قیمت‌گذاری رقابتی:** از ساختارهای قیمت‌گذاری رقابتی بهره‌مند شوید که برای استراتژی معامله شما مناسب است.
 
-    ![Headers](/screenshots/swagger-github-pages.png?raw=true)
-    
-3. Browse to the Swagger documentation at `https://{github-username}.github.io/{repository-name}/`.
+آماده‌اید از قابلیت‌های قدرتمند Invex بهره‌مند شوید؟ همین امروز با ثبت‌نام در یک حساب و دسترسی به منابع گسترده ما شروع کنید.
 
+### احراز هویت و مجوز
+برای استفاده از Invex، ابتدا باید اطلاعات تماس اولیه را ارائه دهید، با شرایط و ضوابط ما موافقت کنید و مراحل تأیید هویت را تکمیل کنید تا مدارک API را دریافت کنید. پس از تأیید، یک جفت کلید API شامل یک کلید عمومی، یک کلید API برای استفاده در هدر (**X-API-Key-Invex**) و یک کلید مخفی دریافت خواهید کرد.
 
-## Steps to manually configure in your own repository
+توجه: کلید API شما به عنوان یک شناسه امن عمل می‌کند که به شما اجازه می‌دهد درخواست‌ها را امضا کرده و هویت خود را تأیید کنید. نگه داشتن کلید API به صورت محرمانه بسیار مهم است؛ هرگز آن را با کسی خارج از افراد مجاز به اشتراک نگذارید. اگر مشکوک به فعالیت غیرمجاز یا نقض امنیتی شدید، بلافاصله به تیم پشتیبانی ما اطلاع دهید یا کلید API خود را از طریق داشبورد خود لغو کنید.
 
-1. Download the latest stable release of the Swagger UI [here](https://github.com/swagger-api/swagger-ui/releases).
+علاوه بر این، Invex چندین تدابیر امنیتی برای محافظت در برابر فعالیت‌های مخرب پیاده‌سازی می‌کند:
 
-2. Extract the contents and copy the "dist" directory to the root of your repository.
+پروتکل‌های رمزنگاری: تمام ارتباطات بین سرورها و برنامه‌های مشتری از رمزنگاری استاندارد صنعت TLS v1.2+ استفاده می‌کند.
+محدودیت‌های نرخ: برای جلوگیری از سوء استفاده، محدودیت‌های سختگیرانه‌ای بر روی برخی از نقاط انتهایی اعمال می‌کنیم.
+پیشگیری از حملات بازپخش: سیستم‌های ما تلاش برای استفاده مجدد از پیام‌های ارسال شده قبلی را شناسایی و مسدود می‌کنند.
+چگونه داده‌های ورودی را امضا کنیم؟
+برای هر نقطه انتهایی با داده‌های ورودی، باید داده‌های ورودی خود را امضا کنید.
+برای این کار، باید یک فیلد expire_at در پارامترهای query یا بدنه درخواست خود ارائه دهید.
+به نمونه موجود در درخواست‌های زیر نگاهی بیندازید.
+اما چگونه داده‌های خود را امضا کنید؟
 
-3. Move the file "index.html" from the directory "dist" to the root of your repository.
-    ```
-    mv dist/index.html .
-    ```
-    
-4. Copy the YAML specification file for your API to the root of your repository.
+در اینجا یک نمونه کد در پایتون آمده است:
 
-5. Edit [dist/swagger-initializer.js](dist/swagger-initializer.js) and change the `url` property to reference your local YAML file. 
-    ```javascript
-        window.ui = SwaggerUIBundle({
-            url: "swagger.yaml",
-        ...
-    ```
-    Then fix any references to files in the "dist" directory.
-    ```html
-    ...
-    <link rel="stylesheet" type="text/css" href="dist/swagger-ui.css" >
-    <link rel="icon" type="image/png" href="dist/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="dist/favicon-16x16.png" sizes="16x16" />    
-    ...
-    <script src="dist/swagger-ui-bundle.js"> </script>
-    <script src="dist/swagger-ui-standalone-preset.js"> </script>    
-    ...
-    ```
-    
-6. Go to the settings for your repository at `https://github.com/{github-username}/{repository-name}/settings` and enable GitHub Pages.
-
-    ![Headers](/screenshots/swagger-github-pages.png?raw=true)
-    
-7. Browse to the Swagger documentation at `https://{github-username}.github.io/{repository-name}/`.
-
-   The example API specification used by this repository can be seen hosted at [https://peter-evans.github.io/swagger-github-pages](https://peter-evans.github.io/swagger-github-pages/).
+```python
+import binascii
+from cryptography.hazmat.primitives.serialization import load_der_private_key
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
+def sign_using_private_key():
+    private_key = ... # کلید مخفی API شما.
+    message =...# داده‌های ورودی کاربر به صورت JSON کد شده، شامل expire_at
+    byte_private_key = binascii.unhexlify(private_key)
+    rsa_private_key = load_der_private_key(byte_private_key, password=None)
+    signature = rsa_private_key.sign(
+        message.encode(),
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    return signature.hex()
+if __name__ == '__main__':
+    print(sign_using_private_key())
+```
