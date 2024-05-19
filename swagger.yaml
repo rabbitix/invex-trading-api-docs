@@ -1,718 +1,1903 @@
----
-swagger: "2.0"
+openapi: 3.0.1
 info:
-  description: "This is a sample server Petstore server.  You can find out more about\
-    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).\
-    \  For this sample, you can use the api key `special-key` to test the authorization\
-    \ filters."
-  version: "1.0.5"
-  title: "Swagger Petstore"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
-basePath: "/v2"
-tags:
-- name: "pet"
-  description: "Everything about your Pets"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "store"
-  description: "Access to Petstore orders"
-- name: "user"
-  description: "Operations about user"
-  externalDocs:
-    description: "Find out more about our store"
-    url: "http://swagger.io"
-schemes:
-- "https"
-- "http"
+  title: FastAPI
+  version: 0.1.0
 paths:
-  /pet/{petId}/uploadImage:
-    post:
-      tags:
-      - "pet"
-      summary: "uploads an image"
-      description: ""
-      operationId: "uploadFile"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to update"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "additionalMetadata"
-        in: "formData"
-        description: "Additional data to pass to server"
-        required: false
-        type: "string"
-      - name: "file"
-        in: "formData"
-        description: "file to upload"
-        required: false
-        type: "file"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet:
-    post:
-      tags:
-      - "pet"
-      summary: "Add a new pet to the store"
-      description: ""
-      operationId: "addPet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
-      responses:
-        405:
-          description: "Invalid input"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-    put:
-      tags:
-      - "pet"
-      summary: "Update an existing pet"
-      description: ""
-      operationId: "updatePet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-        405:
-          description: "Validation exception"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet/findByStatus:
+  /trading/v1/orders:
     get:
       tags:
-      - "pet"
-      summary: "Finds Pets by status"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findPetsByStatus"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-          default: "available"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid status value"
+        - TRADING_API
+      summary: Search Orders
+      operationId: search_orders_trading_v1_orders_get
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet/findByTags:
-    get:
-      tags:
-      - "pet"
-      summary: "Finds Pets by tags"
-      description: "Multiple tags can be provided with comma separated strings. Use\
-        \ tag1, tag2, tag3 for testing."
-      operationId: "findPetsByTags"
-      produces:
-      - "application/json"
-      - "application/xml"
+        - APIKeyHeader: []
       parameters:
-      - name: "tags"
-        in: "query"
-        description: "Tags to filter by"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
+        - name: symbol
+          in: query
+          required: false
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid tag value"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-      deprecated: true
-  /pet/{petId}:
-    get:
-      tags:
-      - "pet"
-      summary: "Find pet by ID"
-      description: "Returns a single pet"
-      operationId: "getPetById"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to return"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        200:
-          description: "successful operation"
+            anyOf:
+              - $ref: '#/components/schemas/MarketType'
+              - type: 'null'
+            title: Symbol
+        - name: start_at
+          in: query
+          required: false
           schema:
-            $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-      security:
-      - api_key: []
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: Start At
+        - name: end_at
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: End At
+        - name: side
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/OrderSideType'
+              - type: 'null'
+            title: Side
+        - name: status
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+              - type: 'null'
+            title: Status
+        - name: type
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+              - type: 'null'
+            title: Type
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            title: Page
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: integer
+                maximum: 100
+              - type: 'null'
+            default: 10
+            title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPISearchOrdersOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-      - "pet"
-      summary: "Updates a pet in the store with form data"
-      description: ""
-      operationId: "updatePetWithForm"
-      consumes:
-      - "application/x-www-form-urlencoded"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet that needs to be updated"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the pet"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the pet"
-        required: false
-        type: "string"
-      responses:
-        405:
-          description: "Invalid input"
+        - TRADING_API
+      summary: Create Order
+      operationId: create_order_trading_v1_orders_post
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+        - APIKeyHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradingAPIOrderCommandInputDTOV1'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPICreateOrderCommandOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - "pet"
-      summary: "Deletes a pet"
-      description: ""
-      operationId: "deletePet"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "petId"
-        in: "path"
-        description: "Pet id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
+        - TRADING_API
+      summary: Create Cancel Order Command
+      operationId: create_cancel_order_command_trading_v1_orders_delete
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /store/order:
-    post:
-      tags:
-      - "store"
-      summary: "Place an order for a pet"
-      description: ""
-      operationId: "placeOrder"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
+        - APIKeyHeader: []
       parameters:
-      - in: "body"
-        name: "body"
-        description: "order placed for purchasing the pet"
-        required: true
-        schema:
-          $ref: "#/definitions/Order"
-      responses:
-        200:
-          description: "successful operation"
+        - name: order_id
+          in: query
+          required: false
           schema:
-            $ref: "#/definitions/Order"
-        400:
-          description: "Invalid Order"
-  /store/order/{orderId}:
+            anyOf:
+              - type: string
+                format: uuid
+              - type: 'null'
+            title: Order Id
+        - name: client_order_id
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Client Order Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPICreateCancelOrderCommandOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /trading/v1/order:
     get:
       tags:
-      - "store"
-      summary: "Find purchase order by ID"
-      description: "For valid response try integer IDs with value >= 1 and <= 10.\
-        \ Other values will generated exceptions"
-      operationId: "getOrderById"
-      produces:
-      - "application/json"
-      - "application/xml"
+        - TRADING_API
+      summary: Get Order
+      operationId: get_order_trading_v1_order_get
+      security:
+        - APIKeyHeader: []
       parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        type: "integer"
-        maximum: 10
-        minimum: 1
-        format: "int64"
-      responses:
-        200:
-          description: "successful operation"
+        - name: order_id
+          in: query
+          required: false
           schema:
-            $ref: "#/definitions/Order"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Order not found"
-    delete:
-      tags:
-      - "store"
-      summary: "Delete purchase order by ID"
-      description: "For valid response try integer IDs with positive integer value.\
-        \ Negative or non-integer values will generate API errors"
-      operationId: "deleteOrder"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of the order that needs to be deleted"
-        required: true
-        type: "integer"
-        minimum: 1
-        format: "int64"
+            anyOf:
+              - type: string
+                format: uuid
+              - type: 'null'
+            title: Order Id
+        - name: client_order_id
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Client Order Id
       responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Order not found"
-  /store/inventory:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPIGetOrderOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /trading/v1/markets:
     get:
       tags:
-      - "store"
-      summary: "Returns pet inventories by status"
-      description: "Returns a map of status codes to quantities"
-      operationId: "getInventory"
-      produces:
-      - "application/json"
-      parameters: []
+        - TRADING_API
+      summary: Get Trading Rules
+      operationId: get_trading_rules_trading_v1_markets_get
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPISearchMarketConfigsOutputDTOV1'
+  /trading/v1/market-depth:
+    get:
+      tags:
+        - TRADING_API
+      summary: Get Order Book
+      operationId: get_order_book_trading_v1_market_depth_get
+      parameters:
+        - name: symbol
+          in: query
+          required: true
           schema:
-            type: "object"
-            additionalProperties:
-              type: "integer"
-              format: "int32"
+            $ref: '#/components/schemas/MarketType'
+        - name: depth
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/TradingAPIMarketDepthTypeV1'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPIGetMarketDepthOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /trading/v1/accounts:
+    get:
+      tags:
+        - TRADING_API
+      summary: Get Account Balance
+      operationId: get_account_balance_trading_v1_accounts_get
       security:
-      - api_key: []
-  /user/createWithArray:
+        - APIKeyHeader: []
+      parameters:
+        - name: currency
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/CurrencyType'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingAPIGetAccountOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /trading/v1/crypto-withdrawals:
     post:
       tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithArrayInput"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
+        - TRADING_API
+      summary: Create Crypto Withdraw
+      operationId: create_crypto_withdraw_trading_v1_crypto_withdrawals_post
+      security:
+        - APIKeyHeader: []
+      requestBody:
         required: true
-        schema:
-          type: "array"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradingApiCreateCryptoWithdrawalInputDTOV1'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingApiCreateCryptoWithdrawalOutputDTOV1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    MarketType:
+      type: string
+      enum:
+        - ADA_IRR
+        - ADA_USDT
+        - BNB_IRR
+        - BNB_USDT
+        - BTC_IRR
+        - BTC_USDT
+        - DOGE_IRR
+        - DOGE_USDT
+        - ETH_IRR
+        - ETH_USDT
+        - FTM_IRR
+        - FTM_USDT
+        - LTC_IRR
+        - LTC_USDT
+        - SHIB_IRR
+        - SHIB_USDT
+        - SOL_IRR
+        - SOL_USDT
+        - TRX_IRR
+        - TRX_USDT
+        - USDT_IRR
+        - MATIC_IRR
+        - MATIC_USDT
+        - DOT_IRR
+        - DOT_USDT
+        - BCH_IRR
+        - BCH_USDT
+        - LINK_IRR
+        - LINK_USDT
+        - XRP_IRR
+        - XRP_USDT
+        - UNI_IRR
+        - UNI_USDT
+        - APE_IRR
+        - APE_USDT
+        - AVAX_IRR
+        - AVAX_USDT
+        - ETC_IRR
+        - ETC_USDT
+        - FIL_IRR
+        - FIL_USDT
+        - SAND_IRR
+        - SAND_USDT
+        - MANA_IRR
+        - MANA_USDT
+        - ATOM_IRR
+        - ATOM_USDT
+        - NEAR_IRR
+        - NEAR_USDT
+        - AAVE_IRR
+        - AAVE_USDT
+        - EOS_IRR
+        - EOS_USDT
+        - CHZ_IRR
+        - CHZ_USDT
+        - AXS_IRR
+        - AXS_USDT
+        - MKR_IRR
+        - MKR_USDT
+        - USDC_IRR
+        - USDC_USDT
+        - XLM_IRR
+        - XLM_USDT
+        - BUSD_IRR
+        - BUSD_USDT
+        - EGLD_IRR
+        - EGLD_USDT
+        - ARB_IRR
+        - ARB_USDT
+        - GRT_IRR
+        - GRT_USDT
+        - DAI_IRR
+        - DAI_USDT
+        - LDO_IRR
+        - LDO_USDT
+        - QNT_IRR
+        - QNT_USDT
+        - CRO_IRR
+        - CRO_USDT
+        - ALGO_IRR
+        - ALGO_USDT
+        - XMR_IRR
+        - XMR_USDT
+        - APT_IRR
+        - APT_USDT
+        - OP_IRR
+        - OP_USDT
+        - HBAR_IRR
+        - HBAR_USDT
+        - WBTC_IRR
+        - WBTC_USDT
+        - TUSD_IRR
+        - TUSD_USDT
+        - LEO_IRR
+        - LEO_USDT
+        - TON_IRR
+        - TON_USDT
+        - MNT_IRR
+        - MNT_USDT
+        - XTZ_IRR
+        - XTZ_USDT
+        - IMX_IRR
+        - IMX_USDT
+        - THETA_IRR
+        - THETA_USDT
+        - INJ_IRR
+        - INJ_USDT
+        - RNDR_IRR
+        - RNDR_USDT
+        - SNX_IRR
+        - SNX_USDT
+        - KAVA_IRR
+        - KAVA_USDT
+        - XEC_IRR
+        - XEC_USDT
+        - USDP_IRR
+        - USDP_USDT
+        - PAXG_IRR
+        - PAXG_USDT
+        - XAUt_IRR
+        - XAUt_USDT
+        - FLOW_IRR
+        - FLOW_USDT
+        - RPL_IRR
+        - RPL_USDT
+        - KCS_IRR
+        - KCS_USDT
+        - ZEC_IRR
+        - ZEC_USDT
+        - CFX_IRR
+        - CFX_USDT
+        - IOTA_IRR
+        - IOTA_USDT
+        - HT_IRR
+        - HT_USDT
+        - FXS_IRR
+        - FXS_USDT
+        - CRV_IRR
+        - CRV_USDT
+        - BTT_IRR
+        - BTT_USDT
+        - GT_IRR
+        - GT_USDT
+        - GALA_IRR
+        - GALA_USDT
+        - TWT_IRR
+        - TWT_USDT
+        - GMX_IRR
+        - GMX_USDT
+        - NEXO_IRR
+        - NEXO_USDT
+        - COMP_IRR
+        - COMP_USDT
+        - NFT_IRR
+        - NFT_USDT
+        - DYDX_IRR
+        - DYDX_USDT
+        - GUSD_IRR
+        - GUSD_USDT
+        - WOO_IRR
+        - WOO_USDT
+        - ROSE_IRR
+        - ROSE_USDT
+        - GNO_IRR
+        - GNO_USDT
+        - BAT_IRR
+        - BAT_USDT
+        - INCH_IRR
+        - INCH_USDT
+        - ZIL_IRR
+        - ZIL_USDT
+        - CAKE_IRR
+        - CAKE_USDT
+        - PEPE_IRR
+        - PEPE_USDT
+        - ELF_IRR
+        - ELF_USDT
+        - SFP_IRR
+        - SFP_USDT
+        - LRC_IRR
+        - LRC_USDT
+        - GMT_IRR
+        - GMT_USDT
+        - YFI_IRR
+        - YFI_USDT
+        - MASK_IRR
+        - MASK_USDT
+        - BAL_IRR
+        - BAL_USDT
+        - LPT_IRR
+        - LPT_USDT
+        - ENS_IRR
+        - ENS_USDT
+        - SUSHI_IRR
+        - SUSHI_USDT
+        - API3_IRR
+        - API3_USDT
+        - ONE_IRR
+        - ONE_USDT
+        - GLM_IRR
+        - GLM_USDT
+        - CVC_IRR
+        - CVC_USDT
+        - DAO_IRR
+        - DAO_USDT
+        - NMR_IRR
+        - NMR_USDT
+        - SNT_IRR
+        - SNT_USDT
+        - ANT_IRR
+        - ANT_USDT
+        - ZRX_IRR
+        - ZRX_USDT
+        - SLP_IRR
+        - SLP_USDT
+        - BLUR_IRR
+        - BLUR_USDT
+        - FLOKI_IRR
+        - FLOKI_USDT
+        - BABYDOGE_IRR
+        - BABYDOGE_USDT
+        - CELR_IRR
+        - CELR_USDT
+        - T_IRR
+        - T_USDT
+        - MAGIC_IRR
+        - MAGIC_USDT
+        - BAND_IRR
+        - BAND_USDT
+        - CVX_IRR
+        - CVX_USDT
+        - SSV_IRR
+        - SSV_USDT
+        - MDT_IRR
+        - MDT_USDT
+        - OMG_IRR
+        - OMG_USDT
+        - WLD_IRR
+        - WLD_USDT
+        - RDNT_IRR
+        - RDNT_USDT
+        - JST_IRR
+        - JST_USDT
+      title: MarketType
+    CurrencyType:
+      type: string
+      enum:
+        - ADA
+        - BNB
+        - BTC
+        - DOGE
+        - ETH
+        - FTM
+        - IRR
+        - LTC
+        - SHIB
+        - SOL
+        - TRX
+        - USDT
+        - MATIC
+        - DOT
+        - BCH
+        - LINK
+        - XRP
+        - UNI
+        - APE
+        - AVAX
+        - FIL
+        - ETC
+        - SAND
+        - MANA
+        - ATOM
+        - NEAR
+        - AAVE
+        - EOS
+        - CHZ
+        - AXS
+        - MKR
+        - XLM
+        - USDC
+        - BUSD
+        - EGLD
+        - ARB
+        - GRT
+        - DAI
+        - LDO
+        - QNT
+        - CRO
+        - ALGO
+        - TON
+        - XMR
+        - APT
+        - USDP
+        - OP
+        - HBAR
+        - WBTC
+        - TUSD
+        - LEO
+        - MNT
+        - XTZ
+        - IMX
+        - THETA
+        - INJ
+        - RNDR
+        - SNX
+        - KAVA
+        - XEC
+        - PAXG
+        - XAUt
+        - FLOW
+        - RPL
+        - KCS
+        - ZEC
+        - CFX
+        - IOTA
+        - HT
+        - FXS
+        - CRV
+        - BTT
+        - GT
+        - GALA
+        - TWT
+        - GMX
+        - NEXO
+        - COMP
+        - NFT
+        - DYDX
+        - GUSD
+        - WOO
+        - ROSE
+        - GNO
+        - BAT
+        - INCH
+        - ZIL
+        - CAKE
+        - PEPE
+        - ELF
+        - SFP
+        - LRC
+        - GMT
+        - YFI
+        - MASK
+        - BAL
+        - LPT
+        - ENS
+        - SUSHI
+        - API3
+        - ONE
+        - GLM
+        - CVC
+        - DAO
+        - NMR
+        - SNT
+        - ANT
+        - ZRX
+        - SLP
+        - BLUR
+        - FLOKI
+        - BABYDOGE
+        - CELR
+        - T
+        - MAGIC
+        - BAND
+        - CVX
+        - SSV
+        - MDT
+        - OMG
+        - WLD
+        - RDNT
+        - JST
+      title: CurrencyType
+    ValidationError:
+      properties:
+        loc:
           items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-  /user/createWithList:
-    post:
-      tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithListInput"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+    OrderClassTypeV1:
+      type: string
+      enum:
+        - LIMIT
+        - MARKET_BY_AMOUNT
+        - MARKET_BY_VALUE
+        - ONE_CANCEL_THE_OTHER
+        - STOP_LIMIT
+        - STOP_MARKET_BY_AMOUNT
+        - STOP_MARKET_BY_VALUE
+        - TRAILING_STOP
+      title: OrderClassTypeV1
+    OrderDestinyTypeV1:
+      type: string
+      enum:
+        - INACTIVE
+        - NOT_FILLED
+        - FULL_FILLED
+        - CANCELED_BY_USER
+        - CANCELED_BY_MATCH_ENGINE
+        - PARTIALLY_FILLED
+        - CANCELED_BY_EXPIRE
+      title: OrderDestinyTypeV1
+    OrderSideType:
+      type: string
+      enum:
+        - BUYER
+        - SELLER
+      title: OrderSideType
+    OrderTimeInForceTypeV1:
+      type: string
+      enum:
+        - GOOD_TILL_CANCEL
+        - GOOD_TILL_TIME
+        - FILL_OR_KILL
+        - IMMEDIATE_OR_CANCEL
+      title: OrderTimeInForceTypeV1
+    OrderAggressType:
+      const: POST_ONLY
+      title: OrderAggressType
+    OrderVisibilityType:
+      const: VISIBLE
+      title: OrderVisibilityType
+    HTTPValidationError:
+      properties:
+        detail:
           items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-  /user/{username}:
-    get:
-      tags:
-      - "user"
-      summary: "Get user by user name"
-      description: ""
-      operationId: "getUserByName"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Invalid username supplied"
-        404:
-          description: "User not found"
-    put:
-      tags:
-      - "user"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        400:
-          description: "Invalid user supplied"
-        404:
-          description: "User not found"
-    delete:
-      tags:
-      - "user"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
-      responses:
-        400:
-          description: "Invalid username supplied"
-        404:
-          description: "User not found"
-  /user/login:
-    get:
-      tags:
-      - "user"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          headers:
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-          schema:
-            type: "string"
-        400:
-          description: "Invalid username/password supplied"
-  /user/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
-      responses:
-        default:
-          description: "successful operation"
-  /user:
-    post:
-      tags:
-      - "user"
-      summary: "Create user"
-      description: "This can only be done by the logged in user."
-      operationId: "createUser"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "https://petstore.swagger.io/oauth/authorize"
-    flow: "implicit"
-    scopes:
-      read:pets: "read your pets"
-      write:pets: "modify pets in your account"
-definitions:
-  ApiResponse:
-    type: "object"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-      type:
-        type: "string"
-      message:
-        type: "string"
-  Category:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Category"
-  Pet:
-    type: "object"
-    required:
-    - "name"
-    - "photoUrls"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      name:
-        type: "string"
-        example: "doggie"
-      photoUrls:
-        type: "array"
-        xml:
-          wrapped: true
-        items:
-          type: "string"
-          xml:
-            name: "photoUrl"
-      tags:
-        type: "array"
-        xml:
-          wrapped: true
-        items:
-          xml:
-            name: "tag"
-          $ref: "#/definitions/Tag"
-      status:
-        type: "string"
-        description: "pet status in the store"
-        enum:
-        - "available"
-        - "pending"
-        - "sold"
-    xml:
-      name: "Pet"
-  Tag:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Tag"
-  Order:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      petId:
-        type: "integer"
-        format: "int64"
-      quantity:
-        type: "integer"
-        format: "int32"
-      shipDate:
-        type: "string"
-        format: "date-time"
-      status:
-        type: "string"
-        description: "Order Status"
-        enum:
-        - "placed"
-        - "approved"
-        - "delivered"
-      complete:
-        type: "boolean"
-    xml:
-      name: "Order"
-  User:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      username:
-        type: "string"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-      password:
-        type: "string"
-      phone:
-        type: "string"
-      userStatus:
-        type: "integer"
-        format: "int32"
-        description: "User Status"
-    xml:
-      name: "User"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Currency:
+      properties:
+        networks:
+          items:
+            $ref: '#/components/schemas/Network'
+          type: array
+          title: Networks
+        crypto_currency_type:
+          $ref: '#/components/schemas/CryptoCurrencyType'
+      type: object
+      required:
+        - networks
+        - crypto_currency_type
+      title: Currency
+    Network:
+      properties:
+        network_currency_type:
+          $ref: '#/components/schemas/NetworkCurrencyType'
+        network_type:
+          $ref: '#/components/schemas/NetworkType'
+        network_scale:
+          type: string
+          title: Network Scale
+        is_default:
+          type: boolean
+          title: Is Default
+        status_type:
+          allOf:
+            - $ref: '#/components/schemas/StatusType'
+          default: ACTIVE
+      type: object
+      required:
+        - network_currency_type
+        - network_type
+        - network_scale
+        - is_default
+      title: Network
+    NetworkCurrency:
+      properties:
+        network_currency_type:
+          anyOf:
+            - $ref: '#/components/schemas/BaseNetworkCurrencyDTO'
+            - $ref: '#/components/schemas/NetworkCurrencyType'
+          title: Network Currency Type
+        minimum_withdraw_amount:
+          type: string
+          title: Minimum Withdraw Amount
+        minimum_deposit_amount:
+          type: string
+          title: Minimum Deposit Amount
+        withdraw_fee_amount:
+          type: string
+          title: Withdraw Fee Amount
+        network_scale:
+          type: string
+          title: Network Scale
+        is_default:
+          type: boolean
+          title: Is Default
+        withdraw_status_type:
+          $ref: '#/components/schemas/WithdrawStatusType'
+        deposit_status_type:
+          $ref: '#/components/schemas/DepositStatusType'
+        status_type:
+          $ref: '#/components/schemas/StatusType'
+        main_explorer:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Main Explorer
+        test_explorer:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Test Explorer
+        address_regex:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Address Regex
+      type: object
+      required:
+        - network_currency_type
+        - minimum_withdraw_amount
+        - minimum_deposit_amount
+        - withdraw_fee_amount
+        - network_scale
+        - is_default
+        - withdraw_status_type
+        - deposit_status_type
+        - status_type
+        - main_explorer
+        - test_explorer
+        - address_regex
+      title: NetworkCurrency
+    NetworkCurrencyType:
+      type: string
+      enum:
+        - ADA_ON_BSC
+        - BNB_ON_BSC
+        - BTC_ON_BTC
+        - DOGE_ON_DOGE
+        - ETH_ON_ETH
+        - FTM_ON_BSC
+        - LTC_ON_BSC
+        - SHIB_ON_ETH
+        - SOL_ON_BSC
+        - TRX_ON_TRX
+        - USDT_ON_TRX
+        - MATIC_ON_POLYGON
+        - DOT_ON_BSC
+        - BCH_ON_BSC
+        - LINK_ON_BSC
+        - XRP_ON_XRP
+        - UNI_ON_BSC
+        - APE_ON_ETH
+        - APE_ON_BSC
+        - AVAX_ON_BSC
+        - ETC_ON_BSC
+        - FIL_ON_BSC
+        - SAND_ON_ETH
+        - MANA_ON_ETH
+        - ADA_ON_CARDANO
+        - ATOM_ON_BSC
+        - NEAR_ON_BSC
+        - AAVE_ON_BSC
+        - EOS_ON_BSC
+        - CHZ_ON_ETH
+        - MKR_ON_BSC
+        - USDC_ON_BSC
+        - USDT_ON_BSC
+        - USDT_ON_ETH
+        - USDT_ON_POLYGON
+        - BTC_ON_BSC
+        - BTC_ON_ETH
+        - ETH_ON_BSC
+        - BNB_ON_ETH
+        - XRP_ON_BSC
+        - LTC_ON_LITECOIN
+        - DOT_ON_POLKADOT
+        - MATIC_ON_ETH
+        - BCH_ON_BCH
+        - LINK_ON_ETH
+        - XLM_ON_STELLAR
+        - AVAX_ON_AVALANCHE
+        - BUSD_ON_BSC
+        - FIL_ON_FILECOIN
+        - EGLD_ON_BSC
+        - EGLD_ON_MULTIVERSX
+        - SOL_ON_SOLANA
+        - ATOM_ON_COSMOS
+        - ARB_ON_ETH
+        - ARB_ON_ARBITRUM
+        - ETH_ON_ARBITRUM
+        - NEAR_ON_NEAR
+        - GRT_ON_ETH
+        - AAVE_ON_ETH
+        - EOS_ON_EOS
+        - DAI_ON_BSC
+        - DAI_ON_ETH
+        - LDO_ON_BSC
+        - LDO_ON_ETH
+        - QNT_ON_ETH
+        - CRO_ON_ETH
+        - ALGO_ON_ALGORAND
+        - TON_ON_BSC
+        - TON_ON_ETH
+        - TON_ON_TON
+        - XMR_ON_MONERO
+        - APT_ON_APTOS
+        - USDP_ON_BSC
+        - USDP_ON_ETH
+        - OP_ON_OPTIMISM
+        - ETH_ON_OPTIMISM
+        - HBAR_ON_HEDERA
+        - WBTC_ON_ETH
+        - TUSD_ON_ETH
+        - TUSD_ON_BSC
+        - LEO_ON_ETH
+        - MNT_ON_ETH
+        - MKR_ON_ETH
+        - AXS_ON_BSC
+        - AXS_ON_ETH
+        - XTZ_ON_BSC
+        - IMX_ON_ETH
+        - THETA_ON_ETH
+        - INJ_ON_ETH
+        - INJ_ON_BSC
+        - RNDR_ON_ETH
+        - RNDR_ON_POLYGON
+        - SNX_ON_ETH
+        - SNX_ON_BSC
+        - KAVA_ON_ETH
+        - KAVA_ON_BSC
+        - CHZ_ON_BSC
+        - XEC_ON_BSC
+        - PAXG_ON_ETH
+        - XAUt_ON_ETH
+        - FLOW_ON_ETH
+        - FLOW_ON_FLOW
+        - RPL_ON_ETH
+        - KCS_ON_ETH
+        - ZEC_ON_BSC
+        - CFX_ON_BSC
+        - IOTA_ON_BSC
+        - HT_ON_ETH
+        - FXS_ON_ETH
+        - CRV_ON_ETH
+        - BTT_ON_TRX
+        - GT_ON_ETH
+        - GALA_ON_ETH
+        - TWT_ON_BSC
+        - GMX_ON_AVALANCHE
+        - GMX_ON_ARBITRUM
+        - NEXO_ON_ETH
+        - COMP_ON_ETH
+        - NFT_ON_TRX
+        - DYDX_ON_ETH
+        - GUSD_ON_ETH
+        - WOO_ON_ETH
+        - ROSE_ON_ETH
+        - GNO_ON_ETH
+        - BAT_ON_ETH
+        - BAT_ON_BSC
+        - INCH_ON_ETH
+        - INCH_ON_BSC
+        - ZIL_ON_BSC
+        - CAKE_ON_ETH
+        - CAKE_ON_BSC
+        - PEPE_ON_ETH
+        - ELF_ON_ETH
+        - SFP_ON_ETH
+        - SFP_ON_BSC
+        - LRC_ON_ETH
+        - GMT_ON_BSC
+        - YFI_ON_ETH
+        - YFI_ON_BSC
+        - MASK_ON_ETH
+        - MASK_ON_BSC
+        - BAL_ON_ETH
+        - LPT_ON_ETH
+        - ENS_ON_ETH
+        - SUSHI_ON_ETH
+        - API3_ON_ETH
+        - ONE_ON_HARMONY
+        - GLM_ON_ETH
+        - CVC_ON_ETH
+        - DAO_ON_ETH
+        - NMR_ON_ETH
+        - SNT_ON_ETH
+        - ANT_ON_ETH
+        - ZRX_ON_ETH
+        - SLP_ON_ETH
+        - BLUR_ON_ETH
+        - FLOKI_ON_BSC
+        - BABYDOGE_ON_BSC
+        - CELR_ON_ETH
+        - T_ON_ETH
+        - MAGIC_ON_ARBITRUM
+        - BAND_ON_ETH
+        - CVX_ON_ETH
+        - SSV_ON_ETH
+        - MDT_ON_ETH
+        - OMG_ON_ETH
+        - WLD_ON_ETH
+        - RDNT_ON_ARBITRUM
+        - JST_ON_TRX
+      title: NetworkCurrencyType
+    NetworkType:
+      type: string
+      enum:
+        - BSC
+        - BTC
+        - DOGE
+        - ETH
+        - TRX
+        - POLYGON
+        - XRP
+        - CARDANO
+        - LITECOIN
+        - BCH
+        - POLKADOT
+        - STELLAR
+        - AVALANCHE
+        - FILECOIN
+        - MULTIVERSX
+        - SOLANA
+        - COSMOS
+        - ARBITRUM
+        - NEAR
+        - EOS
+        - ALGORAND
+        - MONERO
+        - APTOS
+        - OPTIMISM
+        - HEDERA
+        - TON
+        - FLOW
+        - HARMONY
+      title: NetworkType
+    WithdrawStatusType:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+      title: WithdrawStatusType
+    MarketConfigDTOV1:
+      properties:
+        symbol:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Symbol
+        tick_size:
+          type: string
+          title: Tick Size
+        amount_step_size:
+          type: string
+          title: Amount Step Size
+        minimum_limit_order_value:
+          type: string
+          title: Minimum Limit Order Value
+        maximum_limit_order_value:
+          anyOf:
+            - type: string
+              gt: 0
+            - type: 'null'
+          title: Maximum Limit Order Value
+      type: object
+      required:
+        - symbol
+        - tick_size
+        - amount_step_size
+        - minimum_limit_order_value
+      title: MarketConfigDTOV1
+    DepositStatusType:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+      title: DepositStatusType
+    DepositTypeV2:
+      type: string
+      enum:
+        - OFFLINE
+        - IPG
+        - SHENASE_DAR
+      title: DepositTypeV2
+    VirtualMachineType:
+      type: string
+      enum:
+        - ETH
+        - BTC
+        - DOGE
+        - TRX
+        - XRP
+        - CARDANO
+        - LITECOIN
+        - POLKADOT
+        - STELLAR
+        - FILECOIN
+        - MULTIVERSX
+        - SOLANA
+        - COSMOS
+        - NEAR
+        - EOS
+        - ALGORAND
+        - MONERO
+        - APTOS
+        - HEDERA
+        - TON
+        - FLOW
+        - HARMONY
+      title: VirtualMachineType
+    TokenStandardType:
+      type: string
+      enum:
+        - TRC20
+        - BEP20
+        - ERC20
+      title: TokenStandardType
+    TradePositionType:
+      type: string
+      enum:
+        - MAKER
+        - TAKER
+      title: TradePositionType
+    BaseMarketDTO:
+      properties:
+        code:
+          type: string
+          title: Code
+        base_currency_type:
+          $ref: '#/components/schemas/CurrencyType'
+        quote_currency_type:
+          $ref: '#/components/schemas/CurrencyType'
+      type: object
+      required:
+        - code
+        - base_currency_type
+        - quote_currency_type
+      title: BaseMarketDTO
+    CryptoCurrencyType:
+      type: string
+      enum:
+        - ADA
+        - BNB
+        - BTC
+        - DOGE
+        - ETH
+        - FTM
+        - LTC
+        - SHIB
+        - SOL
+        - TRX
+        - USDT
+        - MATIC
+        - DOT
+        - BCH
+        - LINK
+        - XRP
+        - UNI
+        - APE
+        - AVAX
+        - ETC
+        - FIL
+        - SAND
+        - MANA
+        - ATOM
+        - NEAR
+        - AAVE
+        - EOS
+        - CHZ
+        - AXS
+        - MKR
+        - USDC
+        - XLM
+        - BUSD
+        - EGLD
+        - ARB
+        - GRT
+        - DAI
+        - LDO
+        - QNT
+        - CRO
+        - ALGO
+        - XMR
+        - APT
+        - OP
+        - HBAR
+        - WBTC
+        - TUSD
+        - LEO
+        - TON
+        - MNT
+        - XTZ
+        - IMX
+        - THETA
+        - INJ
+        - RNDR
+        - SNX
+        - KAVA
+        - XEC
+        - USDP
+        - PAXG
+        - XAUt
+        - FLOW
+        - RPL
+        - KCS
+        - ZEC
+        - CFX
+        - IOTA
+        - HT
+        - FXS
+        - CRV
+        - BTT
+        - GT
+        - GALA
+        - TWT
+        - GMX
+        - NEXO
+        - COMP
+        - NFT
+        - DYDX
+        - GUSD
+        - WOO
+        - ROSE
+        - GNO
+        - BAT
+        - INCH
+        - ZIL
+        - CAKE
+        - PEPE
+        - ELF
+        - SFP
+        - LRC
+        - GMT
+        - YFI
+        - MASK
+        - BAL
+        - LPT
+        - ENS
+        - SUSHI
+        - API3
+        - ONE
+        - GLM
+        - CVC
+        - DAO
+        - NMR
+        - SNT
+        - ANT
+        - ZRX
+        - SLP
+        - BLUR
+        - FLOKI
+        - BABYDOGE
+        - CELR
+        - T
+        - MAGIC
+        - BAND
+        - CVX
+        - SSV
+        - MDT
+        - OMG
+        - WLD
+        - RDNT
+        - JST
+      title: CryptoCurrencyType
+    StatusType:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+      title: StatusType
+    BaseNetworkCurrencyDTO:
+      properties:
+        code:
+          type: string
+          title: Code
+        network_type:
+          $ref: '#/components/schemas/NetworkType'
+        is_native:
+          type: boolean
+          title: Is Native
+        crypto_currency_type:
+          $ref: '#/components/schemas/CryptoCurrencyType'
+        virtual_machine_type:
+          $ref: '#/components/schemas/VirtualMachineType'
+        token_standard:
+          anyOf:
+            - $ref: '#/components/schemas/TokenStandardType'
+            - type: 'null'
+      type: object
+      required:
+        - code
+        - network_type
+        - is_native
+        - crypto_currency_type
+        - virtual_machine_type
+        - token_standard
+      title: BaseNetworkCurrencyDTO
+    TradingAPICreateCancelOrderCommandOutputDTOV1:
+      properties:
+        cancel_order_id:
+          type: string
+          format: uuid
+          title: Cancel Order Id
+      type: object
+      required:
+        - cancel_order_id
+      title: TradingAPICreateCancelOrderCommandOutputDTOV1
+    TradingAPICreateOrderCommandOutputDTOV1:
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          title: Order Id
+      type: object
+      required:
+        - order_id
+      title: TradingAPICreateOrderCommandOutputDTOV1
+    TradingAPIGetAccountOutputDTOV1:
+      properties:
+        currency:
+          $ref: '#/components/schemas/CurrencyType'
+        available:
+          type: string
+          title: Available
+        blocked:
+          type: string
+          title: Blocked
+        total:
+          type: string
+          title: Total
+      type: object
+      required:
+        - currency
+        - available
+        - blocked
+        - total
+      title: TradingAPIGetAccountOutputDTOV1
+    TradingAPIGetMarketDepthOutputDTOV1:
+      properties:
+        ask_orders:
+          items:
+            $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_dtos__OrderDTOV1'
+          type: array
+          title: Ask Orders
+        bid_orders:
+          items:
+            $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_dtos__OrderDTOV1'
+          type: array
+          title: Bid Orders
+      type: object
+      required:
+        - ask_orders
+        - bid_orders
+      title: TradingAPIGetMarketDepthOutputDTOV1
+    TradingAPIGetOrderOutputDTOV1:
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          title: Order Id
+        symbol:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Symbol
+        status:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+        type:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+        side:
+          $ref: '#/components/schemas/OrderSideType'
+        price:
+          type: string
+          title: Price
+        quantity:
+          type: string
+          title: Quantity
+        deal_quantity:
+          type: string
+          title: Deal Quantity
+        time_in_force:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderTimeInForceType'
+        client_order_id:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Client Order Id
+        cancel_order_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          title: Cancel Order Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        trades:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/TradingAPIOrdersTrade'
+              type: array
+            - type: 'null'
+          title: Trades
+      type: object
+      required:
+        - order_id
+        - symbol
+        - status
+        - type
+        - side
+        - price
+        - quantity
+        - deal_quantity
+        - time_in_force
+        - created_at
+        - updated_at
+      title: TradingAPIGetOrderOutputDTOV1
+    TradingAPIMarketDepthTypeV1:
+      type: string
+      enum:
+        - '5'
+        - '20'
+        - '50'
+      title: TradingAPIMarketDepthTypeV1
+    TradingAPIOrderCommandInputDTOV1:
+      properties:
+        quantity:
+          anyOf:
+            - type: number
+              exclusiveMinimum: 0
+            - type: string
+          title: Quantity
+        price:
+          anyOf:
+            - anyOf:
+                - type: number
+                - type: string
+              gt: 0
+            - type: 'null'
+          title: Price
+        market_type:
+          $ref: '#/components/schemas/MarketType'
+        order_side_type:
+          $ref: '#/components/schemas/OrderSideType'
+        order_class_type:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+        customer_external_trace_id:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Customer External Trace Id
+      type: object
+      required:
+        - quantity
+        - market_type
+        - order_side_type
+        - order_class_type
+      title: TradingAPIOrderCommandInputDTOV1
+    TradingAPIOrdersTrade:
+      properties:
+        type:
+          $ref: '#/components/schemas/TradePositionType'
+        quantity:
+          type: string
+          title: Quantity
+        fee:
+          type: string
+          title: Fee
+        price:
+          type: string
+          title: Price
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+        - type
+        - quantity
+        - fee
+        - price
+        - created_at
+      title: TradingAPIOrdersTrade
+      description: Order's Trade DTO
+    TradingAPISearchMarketConfigsOutputDTOV1:
+      properties:
+        rules:
+          items:
+            $ref: '#/components/schemas/MarketConfigDTOV1'
+          type: array
+          title: Rules
+      type: object
+      required:
+        - rules
+      title: TradingAPISearchMarketConfigsOutputDTOV1
+    TradingAPISearchOrderOutputDTOV1:
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          title: Order Id
+        symbol:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Symbol
+        status:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+        type:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+        side:
+          $ref: '#/components/schemas/OrderSideType'
+        price:
+          type: string
+          title: Price
+        quantity:
+          type: string
+          title: Quantity
+        deal_quantity:
+          type: string
+          title: Deal Quantity
+        time_in_force:
+          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderTimeInForceType'
+        client_order_id:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Client Order Id
+        cancel_order_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          title: Cancel Order Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+        - order_id
+        - symbol
+        - status
+        - type
+        - side
+        - price
+        - quantity
+        - deal_quantity
+        - time_in_force
+        - created_at
+        - updated_at
+      title: TradingAPISearchOrderOutputDTOV1
+    TradingAPISearchOrdersOutputDTOV1:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/TradingAPISearchOrderOutputDTOV1'
+          type: array
+          title: Orders
+        total_count:
+          type: integer
+          minimum: 0
+          title: Total Count
+      type: object
+      required:
+        - orders
+        - total_count
+      title: TradingAPISearchOrdersOutputDTOV1
+    TradingApiCreateCryptoWithdrawalInputDTOV1:
+      properties:
+        expire_at:
+          type: string
+          format: date-time
+          title: Expire At
+        customer_uuid:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          title: Customer Uuid
+        account_uuid:
+          type: string
+          format: uuid
+          title: Account Uuid
+        network_currency_type:
+          $ref: '#/components/schemas/NetworkCurrencyType'
+        amount:
+          anyOf:
+            - type: number
+              minimum: 0
+            - type: string
+          title: Amount
+        destination_wallet_address:
+          type: string
+          title: Destination Wallet Address
+        external_trace_id:
+          type: string
+          title: External Trace Id
+      type: object
+      required:
+        - expire_at
+        - account_uuid
+        - network_currency_type
+        - amount
+        - destination_wallet_address
+        - external_trace_id
+      title: TradingApiCreateCryptoWithdrawalInputDTOV1
+    TradingApiCreateCryptoWithdrawalOutputDTOV1:
+      properties:
+        crypto_withdraw_uuid:
+          type: string
+          format: uuid
+          title: Crypto Withdraw Uuid
+      type: object
+      required:
+        - crypto_withdraw_uuid
+      title: TradingApiCreateCryptoWithdrawalOutputDTOV1
+    invex_base_lib__models__types__order_types__OrderClassType:
+      type: string
+      enum:
+        - LIMIT
+        - MARKET
+        - ONE_CANCELS_THE_OTHER
+      title: OrderClassType
+    invex_base_lib__models__types__order_types__OrderDestinyType:
+      type: string
+      enum:
+        - INACTIVE
+        - NOT_FILLED
+        - FULL_FILLED
+        - CANCELED_BY_USER
+        - CANCELED_BY_SYSTEM
+      title: OrderDestinyType
+    invex_base_lib__models__types__order_types__OrderTimeInForceType:
+      type: string
+      enum:
+        - GTC
+        - IOC
+        - FOK
+        - AON
+      title: OrderTimeInForceType
+    src__models__market_data__v1__market_data_dtos__OrderDTOV1:
+      properties:
+        depth:
+          type: integer
+          title: Depth
+        amount:
+          type: string
+          title: Amount
+        price:
+          type: string
+          title: Price
+      type: object
+      required:
+        - depth
+        - amount
+        - price
+      title: OrderDTOV1
+    src__models__market_data__v1__market_data_dtos__SearchLastTradesOutputDTOV1__TradeDTOV1:
+      properties:
+        price:
+          type: string
+          title: Price
+        amount:
+          type: string
+          title: Amount
+        is_buyer_maker:
+          type: boolean
+          title: Is Buyer Maker
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+        - price
+        - amount
+        - is_buyer_maker
+        - created_at
+      title: TradeDTOV1
+    src__models__trade__v1__trade_dtos__SearchOrdersOutputDTOV1__OrderDTOV1:
+      properties:
+        original_order_uuid:
+          type: string
+          format: uuid
+          title: Original Order Uuid
+        cancel_order_command_uuid:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          title: Cancel Order Command Uuid
+        sibling_order_uuid:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          title: Sibling Order Uuid
+        customer_uuid:
+          type: string
+          format: uuid
+          title: Customer Uuid
+        customer_external_trace_id:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Customer External Trace Id
+        order_aggress_type:
+          allOf:
+            - $ref: '#/components/schemas/OrderAggressType'
+          default: POST_ONLY
+        order_visibility_type:
+          allOf:
+            - $ref: '#/components/schemas/OrderVisibilityType'
+          default: VISIBLE
+        order_destiny_type:
+          $ref: '#/components/schemas/OrderDestinyTypeV1'
+        order_class_type:
+          $ref: '#/components/schemas/OrderClassTypeV1'
+        order_time_in_force_type:
+          $ref: '#/components/schemas/OrderTimeInForceTypeV1'
+        order_side_type:
+          $ref: '#/components/schemas/OrderSideType'
+        market_type:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Market Type
+        average_price:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Average Price
+        amount:
+          type: string
+          title: Amount
+        value:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Value
+        limit_price:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Limit Price
+        stop_price:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Stop Price
+        filled_amount:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Filled Amount
+        expect_to_expire_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+          title: Expect To Expire At
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+        - original_order_uuid
+        - customer_uuid
+        - order_destiny_type
+        - order_class_type
+        - order_time_in_force_type
+        - order_side_type
+        - market_type
+        - amount
+        - created_at
+        - updated_at
+      title: OrderDTOV1
+    src__models__trade__v1__trade_dtos__TradeDTOV1:
+      properties:
+        trade_uuid:
+          type: string
+          format: uuid
+          title: Trade Uuid
+        customer_uuid:
+          type: string
+          format: uuid
+          title: Customer Uuid
+        account_uuid:
+          type: string
+          format: uuid
+          title: Account Uuid
+        original_order_uuid:
+          type: string
+          format: uuid
+          title: Original Order Uuid
+        market_type:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Market Type
+        trade_position_type:
+          $ref: '#/components/schemas/TradePositionType'
+        order_side_type:
+          $ref: '#/components/schemas/OrderSideType'
+        customer_external_trace_id:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Customer External Trace Id
+        price:
+          type: string
+          title: Price
+        amount:
+          type: string
+          title: Amount
+        platform_fee:
+          type: string
+          title: Platform Fee
+        fee_bonus:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Fee Bonus
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+        - trade_uuid
+        - customer_uuid
+        - account_uuid
+        - original_order_uuid
+        - market_type
+        - trade_position_type
+        - order_side_type
+        - price
+        - amount
+        - platform_fee
+        - created_at
+      title: TradeDTOV1
+    src__models__trading_api__v1__trading_api_dtos__OrderDTOV1:
+      properties:
+        depth:
+          type: integer
+          title: Depth
+        price:
+          type: string
+          title: Price
+        quantity:
+          type: string
+          title: Quantity
+      type: object
+      required:
+        - depth
+        - price
+        - quantity
+      title: OrderDTOV1
+    src__models__trading_api__v1__trading_api_types__OrderClassType:
+      type: string
+      enum:
+        - LIMIT
+        - MARKET
+      title: OrderClassType
+    src__models__trading_api__v1__trading_api_types__OrderDestinyType:
+      type: string
+      enum:
+        - NOT_FILLED
+        - FULL_FILLED
+        - CANCELED_BY_USER
+        - CANCELED_BY_SYSTEM
+        - INACTIVE
+      title: OrderDestinyType
+    src__models__trading_api__v1__trading_api_types__OrderTimeInForceType:
+      const: GTC
+      title: OrderTimeInForceType
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key-Invex
