@@ -3,16 +3,16 @@ info:
   title: مستندات فنی سرویس معامله‌ی اینوکس
   description: |-
      توضیحات کوتاهی اینجا قرار میگیره
-  termsOfService: http://swagger.io/terms/
+  termsOfService: https://invex.ir/help/
   contact:
-    email: apiteam@swagger.io
+    email: info@invex.ir
   version: 1.0.0
 externalDocs:
-  description: Find out more about Swagger
-  url: http://swagger.io
+  description: دسترسی به داکیومنت
+  url: https://rabbitix.github.io/invex-trading-api-docs/
 servers:
-  - url: https://dev-services.internal.invex.ir
-  - description: dev url
+  - url: https://sandbox.invex.ir
+  - description: sandbox url
   - url: https://invex.ir
   - description: main url
 paths:
