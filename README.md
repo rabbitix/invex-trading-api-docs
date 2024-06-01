@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
 ## قوانین بازار
 
-[نمونه درخواست](/swagger/#/TRADING_API/get_trading_rules_trading_v1_markets_get)
+[نمونه درخواست](/swagger/#/TRADING_API/get_trading_rules_trading_v1_markets_get/.)
 
 قبل از اجرای معاملات، قوانین بازار را که هر نماد را تنظیم می‌کنند، بررسی کنید. این مقررات اندازه‌های tick،
 amount_step_size و حداقل/حداکثر مقادیر سفارش را تعیین می‌کنند. از  `/markets` برای مشاهده‌ی پیکربندی‌های فعلی
