@@ -1,4 +1,4 @@
-<div dir="rtl"> 
+
 
 # API معاملات INVEX
 
