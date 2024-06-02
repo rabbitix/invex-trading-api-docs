@@ -1,6 +1,7 @@
 import binascii
 import datetime
 import json
+import uuid
 
 import requests
 from cryptography.hazmat.primitives import hashes
@@ -29,22 +30,30 @@ class TradingAPI:
         )
         return signature.hex()
 
-    def trading_rules(self):
+    def create_order(self):
         expire_at = (datetime.datetime.now() + datetime.timedelta(seconds=60)).strftime("%Y-%m-%d %H:%M:%S")
         params = {
+            "quantity": "10",
+            "price": "0.1",
+            "symbol": "TRX_USDT",
+            "side": "BUYER",
+            "type": "LIMIT",
+            "client_order_id": str(uuid.uuid4()),
             "expire_at": expire_at,
         }
+
         params["signature"] = self.sign_using_private_key(params)
         response = json.loads(
-            requests.get(
-                url=f'{self._base_url}/trading/v1/markets',
-                params=params,
+            requests.post(
+                url=f'{self._base_url}/trading/v1/orders',
+                data=json.dumps(params),
                 headers=self.headers
             ).content
         )
+
         return response
 
 
 if __name__ == '__main__':
     api = TradingAPI()
-    print(api.trading_rules())
+    print(api.create_order())

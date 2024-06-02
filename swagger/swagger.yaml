@@ -25,6 +25,23 @@ paths:
       security:
         - APIKeyHeader: []
       parameters:
+        - name: expire_at
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: Expire At
+        - name: signature
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Signature
         - name: symbol
           in: query
           required: false
@@ -64,7 +81,7 @@ paths:
           required: false
           schema:
             anyOf:
-              - $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+              - $ref: '#/components/schemas/OrderDestinyType'
               - type: 'null'
             title: Status
         - name: type
@@ -72,7 +89,7 @@ paths:
           required: false
           schema:
             anyOf:
-              - $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+              - $ref: '#/components/schemas/OrderClassType'
               - type: 'null'
             title: Type
         - name: page
@@ -139,6 +156,23 @@ paths:
       security:
         - APIKeyHeader: []
       parameters:
+        - name: expire_at
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: Expire At
+        - name: signature
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Signature
         - name: order_id
           in: query
           required: false
@@ -178,6 +212,23 @@ paths:
       security:
         - APIKeyHeader: []
       parameters:
+        - name: expire_at
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: Expire At
+        - name: signature
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Signature
         - name: order_id
           in: query
           required: false
@@ -265,6 +316,23 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/CurrencyType'
+        - name: expire_at
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            title: Expire At
+        - name: signature
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Signature
       responses:
         '200':
           description: Successful Response
@@ -307,6 +375,186 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    BaseMarketDTO:
+      properties:
+        code:
+          type: string
+          title: Code
+        base_currency_type:
+          $ref: '#/components/schemas/CurrencyType'
+        quote_currency_type:
+          $ref: '#/components/schemas/CurrencyType'
+      type: object
+      required:
+        - code
+        - base_currency_type
+        - quote_currency_type
+      title: BaseMarketDTO
+    CurrencyType:
+      type: string
+      enum:
+        - ADA
+        - BNB
+        - BTC
+        - DOGE
+        - ETH
+        - FTM
+        - IRR
+        - LTC
+        - SHIB
+        - SOL
+        - TRX
+        - USDT
+        - MATIC
+        - DOT
+        - BCH
+        - LINK
+        - XRP
+        - UNI
+        - APE
+        - AVAX
+        - FIL
+        - ETC
+        - SAND
+        - MANA
+        - ATOM
+        - NEAR
+        - AAVE
+        - EOS
+        - CHZ
+        - AXS
+        - MKR
+        - XLM
+        - USDC
+        - BUSD
+        - EGLD
+        - ARB
+        - GRT
+        - DAI
+        - LDO
+        - QNT
+        - CRO
+        - ALGO
+        - TON
+        - XMR
+        - APT
+        - USDP
+        - OP
+        - HBAR
+        - WBTC
+        - TUSD
+        - LEO
+        - MNT
+        - XTZ
+        - IMX
+        - THETA
+        - INJ
+        - RNDR
+        - SNX
+        - KAVA
+        - XEC
+        - PAXG
+        - XAUt
+        - FLOW
+        - RPL
+        - KCS
+        - ZEC
+        - CFX
+        - IOTA
+        - HT
+        - FXS
+        - CRV
+        - BTT
+        - GT
+        - GALA
+        - TWT
+        - GMX
+        - NEXO
+        - COMP
+        - NFT
+        - DYDX
+        - GUSD
+        - WOO
+        - ROSE
+        - GNO
+        - BAT
+        - INCH
+        - ZIL
+        - CAKE
+        - PEPE
+        - ELF
+        - SFP
+        - LRC
+        - GMT
+        - YFI
+        - MASK
+        - BAL
+        - LPT
+        - ENS
+        - SUSHI
+        - API3
+        - ONE
+        - GLM
+        - CVC
+        - DAO
+        - NMR
+        - SNT
+        - ANT
+        - ZRX
+        - SLP
+        - BLUR
+        - FLOKI
+        - BABYDOGE
+        - CELR
+        - T
+        - MAGIC
+        - BAND
+        - CVX
+        - SSV
+        - MDT
+        - OMG
+        - WLD
+        - RDNT
+        - JST
+      title: CurrencyType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MarketConfigDTOV1:
+      properties:
+        symbol:
+          anyOf:
+            - $ref: '#/components/schemas/BaseMarketDTO'
+            - $ref: '#/components/schemas/MarketType'
+          title: Symbol
+        tick_size:
+          type: string
+          title: Tick Size
+        amount_step_size:
+          type: string
+          title: Amount Step Size
+        minimum_limit_order_value:
+          type: string
+          title: Minimum Limit Order Value
+        maximum_limit_order_value:
+          anyOf:
+            - type: string
+              gt: 0
+            - type: 'null'
+          title: Maximum Limit Order Value
+      type: object
+      required:
+        - symbol
+        - tick_size
+        - amount_step_size
+        - minimum_limit_order_value
+      title: MarketConfigDTOV1
     MarketType:
       type: string
       enum:
@@ -554,301 +802,6 @@ components:
         - JST_IRR
         - JST_USDT
       title: MarketType
-    CurrencyType:
-      type: string
-      enum:
-        - ADA
-        - BNB
-        - BTC
-        - DOGE
-        - ETH
-        - FTM
-        - IRR
-        - LTC
-        - SHIB
-        - SOL
-        - TRX
-        - USDT
-        - MATIC
-        - DOT
-        - BCH
-        - LINK
-        - XRP
-        - UNI
-        - APE
-        - AVAX
-        - FIL
-        - ETC
-        - SAND
-        - MANA
-        - ATOM
-        - NEAR
-        - AAVE
-        - EOS
-        - CHZ
-        - AXS
-        - MKR
-        - XLM
-        - USDC
-        - BUSD
-        - EGLD
-        - ARB
-        - GRT
-        - DAI
-        - LDO
-        - QNT
-        - CRO
-        - ALGO
-        - TON
-        - XMR
-        - APT
-        - USDP
-        - OP
-        - HBAR
-        - WBTC
-        - TUSD
-        - LEO
-        - MNT
-        - XTZ
-        - IMX
-        - THETA
-        - INJ
-        - RNDR
-        - SNX
-        - KAVA
-        - XEC
-        - PAXG
-        - XAUt
-        - FLOW
-        - RPL
-        - KCS
-        - ZEC
-        - CFX
-        - IOTA
-        - HT
-        - FXS
-        - CRV
-        - BTT
-        - GT
-        - GALA
-        - TWT
-        - GMX
-        - NEXO
-        - COMP
-        - NFT
-        - DYDX
-        - GUSD
-        - WOO
-        - ROSE
-        - GNO
-        - BAT
-        - INCH
-        - ZIL
-        - CAKE
-        - PEPE
-        - ELF
-        - SFP
-        - LRC
-        - GMT
-        - YFI
-        - MASK
-        - BAL
-        - LPT
-        - ENS
-        - SUSHI
-        - API3
-        - ONE
-        - GLM
-        - CVC
-        - DAO
-        - NMR
-        - SNT
-        - ANT
-        - ZRX
-        - SLP
-        - BLUR
-        - FLOKI
-        - BABYDOGE
-        - CELR
-        - T
-        - MAGIC
-        - BAND
-        - CVX
-        - SSV
-        - MDT
-        - OMG
-        - WLD
-        - RDNT
-        - JST
-      title: CurrencyType
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-              - type: string
-              - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-        - loc
-        - msg
-        - type
-      title: ValidationError
-    OrderClassTypeV1:
-      type: string
-      enum:
-        - LIMIT
-        - MARKET_BY_AMOUNT
-        - MARKET_BY_VALUE
-        - ONE_CANCEL_THE_OTHER
-        - STOP_LIMIT
-        - STOP_MARKET_BY_AMOUNT
-        - STOP_MARKET_BY_VALUE
-        - TRAILING_STOP
-      title: OrderClassTypeV1
-    OrderDestinyTypeV1:
-      type: string
-      enum:
-        - INACTIVE
-        - NOT_FILLED
-        - FULL_FILLED
-        - CANCELED_BY_USER
-        - CANCELED_BY_MATCH_ENGINE
-        - PARTIALLY_FILLED
-        - CANCELED_BY_EXPIRE
-      title: OrderDestinyTypeV1
-    OrderSideType:
-      type: string
-      enum:
-        - BUYER
-        - SELLER
-      title: OrderSideType
-    OrderTimeInForceTypeV1:
-      type: string
-      enum:
-        - GOOD_TILL_CANCEL
-        - GOOD_TILL_TIME
-        - FILL_OR_KILL
-        - IMMEDIATE_OR_CANCEL
-      title: OrderTimeInForceTypeV1
-    OrderAggressType:
-      const: POST_ONLY
-      title: OrderAggressType
-    OrderVisibilityType:
-      const: VISIBLE
-      title: OrderVisibilityType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Currency:
-      properties:
-        networks:
-          items:
-            $ref: '#/components/schemas/Network'
-          type: array
-          title: Networks
-        crypto_currency_type:
-          $ref: '#/components/schemas/CryptoCurrencyType'
-      type: object
-      required:
-        - networks
-        - crypto_currency_type
-      title: Currency
-    Network:
-      properties:
-        network_currency_type:
-          $ref: '#/components/schemas/NetworkCurrencyType'
-        network_type:
-          $ref: '#/components/schemas/NetworkType'
-        network_scale:
-          type: string
-          title: Network Scale
-        is_default:
-          type: boolean
-          title: Is Default
-        status_type:
-          allOf:
-            - $ref: '#/components/schemas/StatusType'
-          default: ACTIVE
-      type: object
-      required:
-        - network_currency_type
-        - network_type
-        - network_scale
-        - is_default
-      title: Network
-    NetworkCurrency:
-      properties:
-        network_currency_type:
-          anyOf:
-            - $ref: '#/components/schemas/BaseNetworkCurrencyDTO'
-            - $ref: '#/components/schemas/NetworkCurrencyType'
-          title: Network Currency Type
-        minimum_withdraw_amount:
-          type: string
-          title: Minimum Withdraw Amount
-        minimum_deposit_amount:
-          type: string
-          title: Minimum Deposit Amount
-        withdraw_fee_amount:
-          type: string
-          title: Withdraw Fee Amount
-        network_scale:
-          type: string
-          title: Network Scale
-        is_default:
-          type: boolean
-          title: Is Default
-        withdraw_status_type:
-          $ref: '#/components/schemas/WithdrawStatusType'
-        deposit_status_type:
-          $ref: '#/components/schemas/DepositStatusType'
-        status_type:
-          $ref: '#/components/schemas/StatusType'
-        main_explorer:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Main Explorer
-        test_explorer:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Test Explorer
-        address_regex:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Address Regex
-      type: object
-      required:
-        - network_currency_type
-        - minimum_withdraw_amount
-        - minimum_deposit_amount
-        - withdraw_fee_amount
-        - network_scale
-        - is_default
-        - withdraw_status_type
-        - deposit_status_type
-        - status_type
-        - main_explorer
-        - test_explorer
-        - address_regex
-      title: NetworkCurrency
     NetworkCurrencyType:
       type: string
       enum:
@@ -1022,299 +975,53 @@ components:
         - RDNT_ON_ARBITRUM
         - JST_ON_TRX
       title: NetworkCurrencyType
-    NetworkType:
+    OrderClassType:
       type: string
       enum:
-        - BSC
-        - BTC
-        - DOGE
-        - ETH
-        - TRX
-        - POLYGON
-        - XRP
-        - CARDANO
-        - LITECOIN
-        - BCH
-        - POLKADOT
-        - STELLAR
-        - AVALANCHE
-        - FILECOIN
-        - MULTIVERSX
-        - SOLANA
-        - COSMOS
-        - ARBITRUM
-        - NEAR
-        - EOS
-        - ALGORAND
-        - MONERO
-        - APTOS
-        - OPTIMISM
-        - HEDERA
-        - TON
-        - FLOW
-        - HARMONY
-      title: NetworkType
-    WithdrawStatusType:
-      type: string
-      enum:
-        - ACTIVE
-        - INACTIVE
-      title: WithdrawStatusType
-    MarketConfigDTOV1:
+        - LIMIT
+        - MARKET
+      title: OrderClassType
+    OrderDTOV1:
       properties:
-        symbol:
-          anyOf:
-            - $ref: '#/components/schemas/BaseMarketDTO'
-            - $ref: '#/components/schemas/MarketType'
-          title: Symbol
-        tick_size:
+        depth:
+          type: integer
+          title: Depth
+        price:
           type: string
-          title: Tick Size
-        amount_step_size:
+          title: Price
+        quantity:
           type: string
-          title: Amount Step Size
-        minimum_limit_order_value:
-          type: string
-          title: Minimum Limit Order Value
-        maximum_limit_order_value:
-          anyOf:
-            - type: string
-              gt: 0
-            - type: 'null'
-          title: Maximum Limit Order Value
+          title: Quantity
       type: object
       required:
-        - symbol
-        - tick_size
-        - amount_step_size
-        - minimum_limit_order_value
-      title: MarketConfigDTOV1
-    DepositStatusType:
+        - depth
+        - price
+        - quantity
+      title: OrderDTOV1
+    OrderDestinyType:
       type: string
       enum:
-        - ACTIVE
+        - NOT_FILLED
+        - FULL_FILLED
+        - CANCELED_BY_USER
+        - CANCELED_BY_SYSTEM
         - INACTIVE
-      title: DepositStatusType
-    DepositTypeV2:
+      title: OrderDestinyType
+    OrderSideType:
       type: string
       enum:
-        - OFFLINE
-        - IPG
-        - SHENASE_DAR
-      title: DepositTypeV2
-    VirtualMachineType:
-      type: string
-      enum:
-        - ETH
-        - BTC
-        - DOGE
-        - TRX
-        - XRP
-        - CARDANO
-        - LITECOIN
-        - POLKADOT
-        - STELLAR
-        - FILECOIN
-        - MULTIVERSX
-        - SOLANA
-        - COSMOS
-        - NEAR
-        - EOS
-        - ALGORAND
-        - MONERO
-        - APTOS
-        - HEDERA
-        - TON
-        - FLOW
-        - HARMONY
-      title: VirtualMachineType
-    TokenStandardType:
-      type: string
-      enum:
-        - TRC20
-        - BEP20
-        - ERC20
-      title: TokenStandardType
+        - BUYER
+        - SELLER
+      title: OrderSideType
+    OrderTimeInForceType:
+      const: GTC
+      title: OrderTimeInForceType
     TradePositionType:
       type: string
       enum:
         - MAKER
         - TAKER
       title: TradePositionType
-    BaseMarketDTO:
-      properties:
-        code:
-          type: string
-          title: Code
-        base_currency_type:
-          $ref: '#/components/schemas/CurrencyType'
-        quote_currency_type:
-          $ref: '#/components/schemas/CurrencyType'
-      type: object
-      required:
-        - code
-        - base_currency_type
-        - quote_currency_type
-      title: BaseMarketDTO
-    CryptoCurrencyType:
-      type: string
-      enum:
-        - ADA
-        - BNB
-        - BTC
-        - DOGE
-        - ETH
-        - FTM
-        - LTC
-        - SHIB
-        - SOL
-        - TRX
-        - USDT
-        - MATIC
-        - DOT
-        - BCH
-        - LINK
-        - XRP
-        - UNI
-        - APE
-        - AVAX
-        - ETC
-        - FIL
-        - SAND
-        - MANA
-        - ATOM
-        - NEAR
-        - AAVE
-        - EOS
-        - CHZ
-        - AXS
-        - MKR
-        - USDC
-        - XLM
-        - BUSD
-        - EGLD
-        - ARB
-        - GRT
-        - DAI
-        - LDO
-        - QNT
-        - CRO
-        - ALGO
-        - XMR
-        - APT
-        - OP
-        - HBAR
-        - WBTC
-        - TUSD
-        - LEO
-        - TON
-        - MNT
-        - XTZ
-        - IMX
-        - THETA
-        - INJ
-        - RNDR
-        - SNX
-        - KAVA
-        - XEC
-        - USDP
-        - PAXG
-        - XAUt
-        - FLOW
-        - RPL
-        - KCS
-        - ZEC
-        - CFX
-        - IOTA
-        - HT
-        - FXS
-        - CRV
-        - BTT
-        - GT
-        - GALA
-        - TWT
-        - GMX
-        - NEXO
-        - COMP
-        - NFT
-        - DYDX
-        - GUSD
-        - WOO
-        - ROSE
-        - GNO
-        - BAT
-        - INCH
-        - ZIL
-        - CAKE
-        - PEPE
-        - ELF
-        - SFP
-        - LRC
-        - GMT
-        - YFI
-        - MASK
-        - BAL
-        - LPT
-        - ENS
-        - SUSHI
-        - API3
-        - ONE
-        - GLM
-        - CVC
-        - DAO
-        - NMR
-        - SNT
-        - ANT
-        - ZRX
-        - SLP
-        - BLUR
-        - FLOKI
-        - BABYDOGE
-        - CELR
-        - T
-        - MAGIC
-        - BAND
-        - CVX
-        - SSV
-        - MDT
-        - OMG
-        - WLD
-        - RDNT
-        - JST
-      title: CryptoCurrencyType
-    StatusType:
-      type: string
-      enum:
-        - ACTIVE
-        - INACTIVE
-      title: StatusType
-    BaseNetworkCurrencyDTO:
-      properties:
-        code:
-          type: string
-          title: Code
-        network_type:
-          $ref: '#/components/schemas/NetworkType'
-        is_native:
-          type: boolean
-          title: Is Native
-        crypto_currency_type:
-          $ref: '#/components/schemas/CryptoCurrencyType'
-        virtual_machine_type:
-          $ref: '#/components/schemas/VirtualMachineType'
-        token_standard:
-          anyOf:
-            - $ref: '#/components/schemas/TokenStandardType'
-            - type: 'null'
-      type: object
-      required:
-        - code
-        - network_type
-        - is_native
-        - crypto_currency_type
-        - virtual_machine_type
-        - token_standard
-      title: BaseNetworkCurrencyDTO
     TradingAPICreateCancelOrderCommandOutputDTOV1:
       properties:
         cancel_order_id:
@@ -1359,12 +1066,12 @@ components:
       properties:
         ask_orders:
           items:
-            $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_dtos__OrderDTOV1'
+            $ref: '#/components/schemas/OrderDTOV1'
           type: array
           title: Ask Orders
         bid_orders:
           items:
-            $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_dtos__OrderDTOV1'
+            $ref: '#/components/schemas/OrderDTOV1'
           type: array
           title: Bid Orders
       type: object
@@ -1384,9 +1091,9 @@ components:
             - $ref: '#/components/schemas/MarketType'
           title: Symbol
         status:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+          $ref: '#/components/schemas/OrderDestinyType'
         type:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+          $ref: '#/components/schemas/OrderClassType'
         side:
           $ref: '#/components/schemas/OrderSideType'
         price:
@@ -1399,7 +1106,7 @@ components:
           type: string
           title: Deal Quantity
         time_in_force:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderTimeInForceType'
+          $ref: '#/components/schemas/OrderTimeInForceType'
         client_order_id:
           anyOf:
             - type: string
@@ -1449,6 +1156,13 @@ components:
       title: TradingAPIMarketDepthTypeV1
     TradingAPIOrderCommandInputDTOV1:
       properties:
+        expire_at:
+          type: string
+          format: date-time
+          title: Expire At
+        signature:
+          type: string
+          title: Signature
         quantity:
           anyOf:
             - type: number
@@ -1468,7 +1182,7 @@ components:
         order_side_type:
           $ref: '#/components/schemas/OrderSideType'
         order_class_type:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+          $ref: '#/components/schemas/OrderClassType'
         customer_external_trace_id:
           anyOf:
             - type: string
@@ -1476,6 +1190,8 @@ components:
           title: Customer External Trace Id
       type: object
       required:
+        - expire_at
+        - signature
         - quantity
         - market_type
         - order_side_type
@@ -1530,9 +1246,9 @@ components:
             - $ref: '#/components/schemas/MarketType'
           title: Symbol
         status:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderDestinyType'
+          $ref: '#/components/schemas/OrderDestinyType'
         type:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderClassType'
+          $ref: '#/components/schemas/OrderClassType'
         side:
           $ref: '#/components/schemas/OrderSideType'
         price:
@@ -1545,7 +1261,7 @@ components:
           type: string
           title: Deal Quantity
         time_in_force:
-          $ref: '#/components/schemas/src__models__trading_api__v1__trading_api_types__OrderTimeInForceType'
+          $ref: '#/components/schemas/OrderTimeInForceType'
         client_order_id:
           anyOf:
             - type: string
@@ -1644,271 +1360,27 @@ components:
       required:
         - crypto_withdraw_uuid
       title: TradingApiCreateCryptoWithdrawalOutputDTOV1
-    invex_base_lib__models__types__order_types__OrderClassType:
-      type: string
-      enum:
-        - LIMIT
-        - MARKET
-        - ONE_CANCELS_THE_OTHER
-      title: OrderClassType
-    invex_base_lib__models__types__order_types__OrderDestinyType:
-      type: string
-      enum:
-        - INACTIVE
-        - NOT_FILLED
-        - FULL_FILLED
-        - CANCELED_BY_USER
-        - CANCELED_BY_SYSTEM
-      title: OrderDestinyType
-    invex_base_lib__models__types__order_types__OrderTimeInForceType:
-      type: string
-      enum:
-        - GTC
-        - IOC
-        - FOK
-        - AON
-      title: OrderTimeInForceType
-    src__models__market_data__v1__market_data_dtos__OrderDTOV1:
+    ValidationError:
       properties:
-        depth:
-          type: integer
-          title: Depth
-        amount:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Amount
-        price:
+          title: Message
+        type:
           type: string
-          title: Price
+          title: Error Type
       type: object
       required:
-        - depth
-        - amount
-        - price
-      title: OrderDTOV1
-    src__models__market_data__v1__market_data_dtos__SearchLastTradesOutputDTOV1__TradeDTOV1:
-      properties:
-        price:
-          type: string
-          title: Price
-        amount:
-          type: string
-          title: Amount
-        is_buyer_maker:
-          type: boolean
-          title: Is Buyer Maker
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-        - price
-        - amount
-        - is_buyer_maker
-        - created_at
-      title: TradeDTOV1
-    src__models__trade__v1__trade_dtos__SearchOrdersOutputDTOV1__OrderDTOV1:
-      properties:
-        original_order_uuid:
-          type: string
-          format: uuid
-          title: Original Order Uuid
-        cancel_order_command_uuid:
-          anyOf:
-            - type: string
-              format: uuid
-            - type: 'null'
-          title: Cancel Order Command Uuid
-        sibling_order_uuid:
-          anyOf:
-            - type: string
-              format: uuid
-            - type: 'null'
-          title: Sibling Order Uuid
-        customer_uuid:
-          type: string
-          format: uuid
-          title: Customer Uuid
-        customer_external_trace_id:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Customer External Trace Id
-        order_aggress_type:
-          allOf:
-            - $ref: '#/components/schemas/OrderAggressType'
-          default: POST_ONLY
-        order_visibility_type:
-          allOf:
-            - $ref: '#/components/schemas/OrderVisibilityType'
-          default: VISIBLE
-        order_destiny_type:
-          $ref: '#/components/schemas/OrderDestinyTypeV1'
-        order_class_type:
-          $ref: '#/components/schemas/OrderClassTypeV1'
-        order_time_in_force_type:
-          $ref: '#/components/schemas/OrderTimeInForceTypeV1'
-        order_side_type:
-          $ref: '#/components/schemas/OrderSideType'
-        market_type:
-          anyOf:
-            - $ref: '#/components/schemas/BaseMarketDTO'
-            - $ref: '#/components/schemas/MarketType'
-          title: Market Type
-        average_price:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Average Price
-        amount:
-          type: string
-          title: Amount
-        value:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Value
-        limit_price:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Limit Price
-        stop_price:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Stop Price
-        filled_amount:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Filled Amount
-        expect_to_expire_at:
-          anyOf:
-            - type: string
-              format: date-time
-            - type: 'null'
-          title: Expect To Expire At
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-        - original_order_uuid
-        - customer_uuid
-        - order_destiny_type
-        - order_class_type
-        - order_time_in_force_type
-        - order_side_type
-        - market_type
-        - amount
-        - created_at
-        - updated_at
-      title: OrderDTOV1
-    src__models__trade__v1__trade_dtos__TradeDTOV1:
-      properties:
-        trade_uuid:
-          type: string
-          format: uuid
-          title: Trade Uuid
-        customer_uuid:
-          type: string
-          format: uuid
-          title: Customer Uuid
-        account_uuid:
-          type: string
-          format: uuid
-          title: Account Uuid
-        original_order_uuid:
-          type: string
-          format: uuid
-          title: Original Order Uuid
-        market_type:
-          anyOf:
-            - $ref: '#/components/schemas/BaseMarketDTO'
-            - $ref: '#/components/schemas/MarketType'
-          title: Market Type
-        trade_position_type:
-          $ref: '#/components/schemas/TradePositionType'
-        order_side_type:
-          $ref: '#/components/schemas/OrderSideType'
-        customer_external_trace_id:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Customer External Trace Id
-        price:
-          type: string
-          title: Price
-        amount:
-          type: string
-          title: Amount
-        platform_fee:
-          type: string
-          title: Platform Fee
-        fee_bonus:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Fee Bonus
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-        - trade_uuid
-        - customer_uuid
-        - account_uuid
-        - original_order_uuid
-        - market_type
-        - trade_position_type
-        - order_side_type
-        - price
-        - amount
-        - platform_fee
-        - created_at
-      title: TradeDTOV1
-    src__models__trading_api__v1__trading_api_dtos__OrderDTOV1:
-      properties:
-        depth:
-          type: integer
-          title: Depth
-        price:
-          type: string
-          title: Price
-        quantity:
-          type: string
-          title: Quantity
-      type: object
-      required:
-        - depth
-        - price
-        - quantity
-      title: OrderDTOV1
-    src__models__trading_api__v1__trading_api_types__OrderClassType:
-      type: string
-      enum:
-        - LIMIT
-        - MARKET
-      title: OrderClassType
-    src__models__trading_api__v1__trading_api_types__OrderDestinyType:
-      type: string
-      enum:
-        - NOT_FILLED
-        - FULL_FILLED
-        - CANCELED_BY_USER
-        - CANCELED_BY_SYSTEM
-        - INACTIVE
-      title: OrderDestinyType
-    src__models__trading_api__v1__trading_api_types__OrderTimeInForceType:
-      const: GTC
-      title: OrderTimeInForceType
+        - loc
+        - msg
+        - type
+      title: ValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
